@@ -30,7 +30,7 @@ export function Details() {
         </p>
       </div>
       <p className="intro">
-        A quiet study in concrete, light and landscape — Casa Oliva sits among the vineyards, framing the mountains
+        A quiet study in concrete, light and landscape. Casa Oliva sits among the vineyards, framing the mountains
         through open-air living spaces.
       </p>
     </section>
