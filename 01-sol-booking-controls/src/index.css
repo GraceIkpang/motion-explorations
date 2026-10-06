@@ -1,0 +1,1006 @@
+/* ─────────────────────────────────────────────────────────────
+   Sōl tokens
+   ───────────────────────────────────────────────────────────── */
+:root {
+  --serif: 'Newsreader', 'Times New Roman', serif;
+  --sans: 'Inter', system-ui, -apple-system, sans-serif;
+
+  --page: #f3f3f2;
+  --paper: #ffffff;
+  --paper-ink: #151515;
+  --paper-muted: #8a8a8a;
+  --paper-line: #e7e7e5;
+
+  --band: #2b2b2b;
+  --card: #262626;
+  --surface: #303030;
+  --line: rgb(255 255 255 / 0.09);
+  --line-strong: rgb(255 255 255 / 0.22);
+  --ink: #f4f4f2;
+  --ink-soft: #d6d6d4;
+  --ink-muted: #8e8e8c;
+  --name: #a7a7a5;
+
+  /* Motion — strong curves; built-in keywords are too weak. */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  /* Lab time scale: 1 real-time, 5 slow-mo. Set from JS. */
+  --t: 1;
+
+  color-scheme: light;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  background: var(--page);
+  color: var(--paper-ink);
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.kicker {
+  margin: 0;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--paper-muted);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Page frame
+   ───────────────────────────────────────────────────────────── */
+.page {
+  min-height: 100dvh;
+  padding: 48px 16px;
+}
+
+.frame {
+  max-width: 952px;
+  margin: 0 auto;
+  background: var(--paper);
+  overflow: hidden; /* the giant "Casa Oliva" must never cause horizontal scroll */
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Lab panel (tooling, not product)
+   ───────────────────────────────────────────────────────────── */
+.lab {
+  display: grid;
+  gap: 20px;
+  padding: 40px 48px 36px;
+  border-bottom: 1px solid var(--paper-line);
+}
+
+.lab-title {
+  margin: 6px 0 0;
+  font: 400 26px/1.15 var(--serif);
+  letter-spacing: -0.01em;
+}
+
+.lab-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 24px;
+}
+
+.segmented {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+.segmented legend {
+  padding: 0;
+  margin-bottom: 6px;
+  font-size: 11px;
+  color: var(--paper-muted);
+}
+
+.segmented-track {
+  display: inline-flex;
+  padding: 2px;
+  border: 1px solid var(--paper-line);
+  border-radius: 999px;
+  background: #f7f7f6;
+}
+
+.segmented label {
+  position: relative;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  color: #6b6b69;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.segmented label[data-checked] {
+  background: var(--paper);
+  color: var(--paper-ink);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.08), 0 0 0 1px rgb(0 0 0 / 0.04);
+}
+
+.segmented input {
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.segmented label:has(input:focus-visible) {
+  outline: 2px solid var(--paper-ink);
+  outline-offset: 1px;
+}
+
+.lab-state {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.lab-state code {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: #f5f5f4;
+  font: 11.5px/1.4 ui-monospace, 'SF Mono', Menlo, monospace;
+  color: #4a4a48;
+}
+
+.lab-stress summary {
+  font-size: 12px;
+  color: #4a4a48;
+  cursor: pointer;
+  width: fit-content;
+}
+
+.lab-stress ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(240px, 100%), 1fr));
+  gap: 6px 24px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 12px;
+  color: #4a4a48;
+}
+
+.lab-stress label {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Booking band — existing Sōl design, recreated as context
+   ───────────────────────────────────────────────────────────── */
+.booking {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr minmax(300px, 346px);
+  gap: 32px;
+  margin: 48px 8px 8px;
+  padding: 0 44px 0 48px;
+  background: var(--band);
+  color: var(--ink);
+  min-height: 330px;
+  overflow: hidden;
+}
+
+.booking-title {
+  padding-top: 34px;
+  min-width: 0;
+}
+
+.booking-eyebrow {
+  margin: 0;
+  font-size: 11px;
+  color: var(--ink-soft);
+}
+
+.booking-name {
+  margin: 22px 0 0 4px;
+  font: 400 clamp(96px, 17vw, 168px) / 0.74 var(--serif);
+  letter-spacing: -0.035em;
+  color: var(--name);
+  white-space: nowrap;
+  /* Bleeds off the bottom of the band, like the original. */
+  margin-bottom: -48px;
+}
+
+.booking-card {
+  align-self: start;
+  padding: 18px 16px 18px;
+  background: var(--card);
+  border: 1px solid #3a3a3a;
+  border-top: 0;
+  border-radius: 0 0 20px 20px;
+}
+
+/* Dates | Guests bar */
+.bar {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  min-height: 36px;
+  border: 1px solid #4a4a4a;
+  border-radius: 12px;
+  background: #2d2d2d;
+}
+
+.bar-divider {
+  width: 1px;
+  height: 14px;
+  background: #555;
+}
+
+.bar-segment {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-width: 0;
+  height: 34px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 11px;
+  background: transparent;
+  font-size: 12px;
+  color: var(--ink);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 150ms ease;
+}
+
+.bar-segment > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bar-icon,
+.chevron {
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.1;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.8;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .bar-segment:hover {
+    background: rgb(255 255 255 / 0.05);
+  }
+}
+
+.bar-segment:active {
+  background: rgb(255 255 255 / 0.08);
+}
+
+.bar-segment:focus-visible {
+  outline: 2px solid rgb(255 255 255 / 0.85);
+  outline-offset: -2px;
+}
+
+/* Open: the trigger stays visibly "lit" so the popover has an owner. */
+.bar-trigger[data-open] {
+  background: rgb(255 255 255 / 0.08);
+}
+
+.bar-trigger .chevron {
+  transition: transform calc(200ms * var(--t)) var(--ease-out);
+}
+
+.bar-trigger[data-open] .chevron {
+  transform: rotate(180deg);
+}
+
+/* Price */
+.price {
+  margin: 18px 0 0;
+}
+
+.price-line,
+.price-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.price-line {
+  padding: 9px 0;
+  border-bottom: 1px solid #3a3a3a;
+  font-size: 11px;
+  color: var(--ink-soft);
+}
+
+.price dt,
+.price dd {
+  margin: 0;
+}
+
+.price-total {
+  padding: 18px 0 16px;
+  font: 400 17px/1 var(--serif);
+}
+
+.reserve {
+  width: 100%;
+  height: 34px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--ink);
+  color: #111;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform 140ms var(--ease-out);
+}
+
+.reserve:active {
+  transform: scale(0.98);
+}
+
+.reserve:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+.reserve-note {
+  margin: 8px 0 0;
+  text-align: center;
+  font-size: 9.5px;
+  color: var(--ink-muted);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Guest fields — shared by popover and sheet
+   ───────────────────────────────────────────────────────────── */
+.guest-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.guest-row-text {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.guest-row-label {
+  font: 400 16px/1.2 var(--serif);
+  color: var(--ink);
+}
+
+.guest-row-hint {
+  font-size: 11px;
+  color: var(--ink-muted);
+}
+
+.counter {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: none;
+}
+
+.count {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 2.25ch;
+  height: 24px;
+  overflow: hidden; /* the old digit leaves through the edge like a counter wheel */
+  font: 400 17px/24px var(--serif);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+
+.count-digit {
+  display: block;
+}
+
+/* Counter button: hover = border brightens; press = 0.92 scale; unavailable = clearly dim. */
+.counter-btn {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease,
+    color 150ms ease,
+    transform calc(160ms * var(--t)) var(--ease-out);
+}
+
+/* Bigger hit area without a bigger visual. */
+.counter-btn::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+}
+
+.counter-btn svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.25;
+  stroke-linecap: round;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .counter-btn:not([data-disabled]):hover {
+    border-color: rgb(255 255 255 / 0.55);
+    background: rgb(255 255 255 / 0.05);
+  }
+}
+
+.counter-btn:not([data-disabled]):active {
+  transform: scale(0.92);
+  background: rgb(255 255 255 / 0.1);
+  transition-duration: 150ms, 150ms, 150ms, calc(100ms * var(--t));
+}
+
+.counter-btn:focus-visible {
+  outline: 2px solid rgb(255 255 255 / 0.85);
+  outline-offset: 2px;
+}
+
+.counter-btn[data-disabled] {
+  border-color: rgb(255 255 255 / 0.07);
+  color: rgb(255 255 255 / 0.22);
+  cursor: not-allowed;
+}
+
+.panel-note {
+  margin: 0;
+  padding-top: 12px;
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--ink-muted);
+  transition: color 200ms ease;
+}
+
+.panel-note[data-at-capacity] {
+  color: var(--ink-soft);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Date picker — shared by popover and sheet
+   ───────────────────────────────────────────────────────────── */
+.cal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0 6px;
+}
+
+.cal-month {
+  margin: 0;
+  font: 400 16px/1.2 var(--serif);
+  color: var(--ink);
+}
+
+.counter-btn.cal-nav {
+  width: 28px;
+  height: 28px;
+}
+
+.cal-nav svg {
+  stroke-linejoin: round;
+}
+
+.cal-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  padding: 6px 0 4px;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--ink-muted);
+}
+
+/* Clips the sliding months; fixed 6 rows so height never jumps.
+   Leaving and entering months share one grid cell, so they overlap during
+   the transition instead of stacking — no measuring, no layout shift. */
+.cal-viewport {
+  display: grid;
+  overflow: hidden;
+}
+
+.cal-grid {
+  grid-area: 1 / 1;
+}
+
+.cal-week {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.cal-cell {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 38px;
+}
+
+/* Range band: continuous behind the days, half-width at the endpoints. */
+.cal-cell[data-band]::before {
+  content: '';
+  position: absolute;
+  inset: 3px 0;
+  background: rgb(255 255 255 / 0.08);
+}
+
+.cal-cell[data-band='start']::before {
+  left: 50%;
+}
+
+.cal-cell[data-band='end']::before {
+  right: 50%;
+}
+
+/* Hover preview while choosing check-out — quieter than a committed range. */
+.cal-cell[data-preview]::before {
+  background: rgb(255 255 255 / 0.045);
+}
+
+.day {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  max-width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition:
+    background-color 120ms ease,
+    color 120ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .day:not([data-unavailable]):not([data-endpoint]):hover {
+    background: rgb(255 255 255 / 0.1);
+  }
+}
+
+.day:focus-visible {
+  outline: 2px solid rgb(255 255 255 / 0.85);
+  outline-offset: 1px;
+}
+
+.day[data-endpoint] {
+  background: var(--ink);
+  color: #141414;
+  font-weight: 500;
+}
+
+/* Unavailable: dim. Booked nights are also struck through — the reason is visible. */
+.day[data-unavailable] {
+  color: rgb(255 255 255 / 0.24);
+  cursor: not-allowed;
+}
+
+.day[data-booked] {
+  text-decoration: line-through;
+  text-decoration-color: rgb(255 255 255 / 0.3);
+}
+
+.day[data-today]::after {
+  content: '';
+  position: absolute;
+  bottom: 3px;
+  width: 3px;
+  height: 3px;
+  border-radius: 999px;
+  background: currentColor;
+  opacity: 0.7;
+}
+
+.sheet .cal-cell {
+  height: 46px;
+}
+
+.sheet .day {
+  max-width: 40px;
+  height: 40px;
+  font-size: 14px;
+}
+
+.sheet .cal-month {
+  font-size: 18px;
+}
+
+.sheet .counter-btn.cal-nav {
+  width: 36px;
+  height: 36px;
+}
+
+[data-motion='reduce'] .day {
+  transition: none;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Desktop: anchored popover
+   Motion job: spatial consistency — "this came from Guests".
+   ───────────────────────────────────────────────────────────── */
+.panel-positioner {
+  z-index: 50;
+}
+
+.panel-popover {
+  width: var(--anchor-width);
+  min-width: 288px;
+  padding: 2px 16px 14px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow:
+    0 1px 0 rgb(255 255 255 / 0.04) inset,
+    0 18px 40px -12px rgb(0 0 0 / 0.55),
+    0 4px 12px -4px rgb(0 0 0 / 0.35);
+  outline: none;
+  transform-origin: var(--origin-x, 75%) top;
+}
+
+/* SUBTLE — 160ms fade + 4px drop. Exit: 120ms fade, no travel. */
+.panel-popover {
+  transition:
+    opacity calc(160ms * var(--t)) var(--ease-out),
+    transform calc(160ms * var(--t)) var(--ease-out);
+}
+
+.panel-popover[data-starting-style] {
+  opacity: 0;
+  transform: translateY(-4px);
+}
+
+.panel-popover[data-ending-style] {
+  opacity: 0;
+  transition-duration: calc(120ms * var(--t));
+}
+
+/* EXPRESSIVE — 260ms: unfurls downward out of the trigger (clip + scale from
+   the trigger's x), rows settle 40ms apart. Still no overshoot. */
+[data-treatment='expressive'] .panel-popover {
+  clip-path: inset(0 0 0 0 round 16px);
+  transition:
+    opacity calc(200ms * var(--t)) var(--ease-out),
+    transform calc(260ms * var(--t)) var(--ease-out),
+    clip-path calc(260ms * var(--t)) var(--ease-out);
+}
+
+[data-treatment='expressive'] .panel-popover[data-starting-style] {
+  opacity: 0;
+  transform: translateY(-8px) scale(0.96);
+  clip-path: inset(0 0 55% 0 round 16px);
+}
+
+[data-treatment='expressive'] .panel-popover[data-ending-style] {
+  opacity: 0;
+  transform: scale(0.98);
+  transition-duration: calc(150ms * var(--t));
+}
+
+/* Content stagger — expressive only, entrance only. Any child with .stagger + --i. */
+[data-treatment='expressive'] .stagger {
+  transition:
+    opacity calc(220ms * var(--t)) var(--ease-out),
+    transform calc(220ms * var(--t)) var(--ease-out),
+    color 200ms ease;
+  /* Delay only the entrance properties; the note's color change stays instant. */
+  --d: calc((60ms + var(--i, 3) * 40ms) * var(--t));
+  transition-delay: var(--d), var(--d), 0ms;
+}
+
+[data-treatment='expressive'] [data-starting-style] .stagger {
+  opacity: 0;
+  transform: translateY(-4px);
+}
+
+/* Exit is one simple fade — no stagger on the way out. */
+[data-treatment='expressive'] [data-ending-style] .stagger {
+  transition-delay: 0ms;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Mobile: bottom sheet (Base UI Drawer — swipe down to dismiss)
+   ───────────────────────────────────────────────────────────── */
+.sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  min-height: 100dvh;
+  background: rgb(0 0 0 / 0.55);
+  opacity: calc(1 - var(--drawer-swipe-progress, 0));
+  transition: opacity calc(320ms * var(--t)) var(--ease-drawer);
+}
+
+.sheet-backdrop[data-starting-style],
+.sheet-backdrop[data-ending-style] {
+  opacity: 0;
+}
+
+.sheet-backdrop[data-swiping] {
+  transition-duration: 0ms;
+}
+
+.sheet-backdrop[data-ending-style] {
+  transition-duration: calc(var(--drawer-swipe-strength, 1) * 220ms * var(--t));
+}
+
+.sheet-viewport {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.sheet {
+  /* Bleed: extra panel below the fold so an upward drag never shows a gap. */
+  --bleed: 3rem;
+  width: 100%;
+  max-height: calc(85dvh + var(--bleed));
+  margin-bottom: calc(-1 * var(--bleed));
+  padding: 10px 20px calc(20px + env(safe-area-inset-bottom, 0px) + var(--bleed));
+  border-top: 1px solid #3a3a3a;
+  border-radius: 24px 24px 0 0;
+  background: var(--card);
+  color: var(--ink);
+  outline: none;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  transform: translateY(var(--drawer-swipe-movement-y, 0px));
+  transition: transform calc(320ms * var(--t)) var(--ease-drawer);
+}
+
+.sheet[data-starting-style],
+.sheet[data-ending-style] {
+  transform: translateY(calc(100% - var(--bleed) + 2px));
+}
+
+.sheet[data-ending-style] {
+  transition-duration: calc(var(--drawer-swipe-strength, 1) * 220ms * var(--t));
+}
+
+.sheet[data-swiping] {
+  user-select: none;
+}
+
+[data-treatment='expressive'] .sheet,
+[data-treatment='expressive'] .sheet-backdrop {
+  transition-duration: calc(440ms * var(--t));
+}
+
+.sheet-handle {
+  width: 36px;
+  height: 4px;
+  margin: 0 auto 14px;
+  border-radius: 999px;
+  background: #4d4d4d;
+}
+
+.sheet-content {
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.sheet-header {
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--line);
+}
+
+.sheet-title {
+  margin: 0;
+  font: 400 22px/1.2 var(--serif);
+}
+
+.sheet-summary {
+  margin: 4px 0 10px;
+  font-size: 12px;
+  color: var(--ink-muted);
+}
+
+/* Thumb-sized controls on touch. */
+.sheet .guest-row {
+  padding: 16px 0;
+}
+
+.sheet .guest-row-label {
+  font-size: 18px;
+}
+
+.sheet .counter {
+  gap: 10px;
+}
+
+.sheet .counter-btn {
+  width: 40px;
+  height: 40px;
+}
+
+.sheet-done {
+  width: 100%;
+  height: 44px;
+  margin-top: 18px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--ink);
+  color: #111;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform calc(140ms * var(--t)) var(--ease-out);
+}
+
+.sheet-done:active {
+  transform: scale(0.98);
+}
+
+.sheet-done:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Reduced motion: lose movement, keep clarity.
+   Every container still fades so open/close is never a pop.
+   ───────────────────────────────────────────────────────────── */
+[data-motion='reduce'] .panel-popover,
+[data-motion='reduce'][data-treatment='expressive'] .panel-popover {
+  clip-path: none;
+  transform: none;
+  transition: opacity calc(120ms * var(--t)) ease;
+}
+
+[data-motion='reduce'] .panel-popover[data-starting-style],
+[data-motion='reduce'] .panel-popover[data-ending-style] {
+  transform: none;
+  clip-path: none;
+}
+
+[data-motion='reduce'] .sheet,
+[data-motion='reduce'][data-treatment='expressive'] .sheet {
+  transition: opacity calc(160ms * var(--t)) ease;
+}
+
+[data-motion='reduce'] .sheet[data-starting-style],
+[data-motion='reduce'] .sheet[data-ending-style] {
+  transform: translateY(var(--drawer-swipe-movement-y, 0px));
+  opacity: 0;
+}
+
+[data-motion='reduce'] .sheet-backdrop,
+[data-motion='reduce'][data-treatment='expressive'] .sheet-backdrop {
+  transition: opacity calc(160ms * var(--t)) ease;
+}
+
+[data-motion='reduce'] .stagger,
+[data-motion='reduce'] [data-starting-style] .stagger {
+  opacity: 1;
+  transform: none;
+  transition: color 200ms ease;
+}
+
+[data-motion='reduce'] .counter-btn:active,
+[data-motion='reduce'] .reserve:active,
+[data-motion='reduce'] .sheet-done:active {
+  transform: none;
+}
+
+[data-motion='reduce'] .bar-trigger .chevron {
+  transition: none;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Responsive
+   ───────────────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  .page {
+    padding: 0;
+  }
+
+  .lab {
+    padding: 28px 16px 24px;
+  }
+
+  .booking {
+    grid-template-columns: 1fr;
+    gap: 0;
+    margin: 24px 0 0;
+    padding: 0 16px 24px;
+    min-height: 0;
+  }
+
+  .booking-title {
+    padding-top: 28px;
+  }
+
+  .booking-name {
+    font-size: clamp(64px, 24vw, 140px);
+    line-height: 0.82;
+    margin-top: 12px;
+    margin-bottom: 24px;
+  }
+
+  .booking-card {
+    border-top: 1px solid #3a3a3a;
+    border-radius: 20px;
+  }
+}
+
+/* Very narrow: stack the bar so "4 guests, 2 infants" never truncates. */
+@media (max-width: 400px) {
+  .bar {
+    grid-template-columns: 1fr;
+  }
+
+  .bar-divider {
+    width: auto;
+    height: 1px;
+    margin: 0 10px;
+  }
+
+  .bar-segment {
+    justify-content: flex-start;
+    height: 42px;
+  }
+
+  .bar-segment > span {
+    flex: 1;
+    text-align: left;
+  }
+}
