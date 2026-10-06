@@ -6,14 +6,15 @@
  * them re-implement a limit. The reducer refuses invalid transitions, so
  * rapid input (or a stale click) can never push the state out of bounds.
  */
+import { VILLA } from '../villa'
 
 export type GuestKey = 'adults' | 'children' | 'infants'
 export type Guests = Record<GuestKey, number>
 
 /** Adults + children. Infants don't count toward occupancy. */
-export const CAPACITY = 4
-/** Casa Oliva has two cribs. */
-export const MAX_INFANTS = 2
+export const CAPACITY = VILLA.capacity
+/** One infant per crib. */
+export const MAX_INFANTS = VILLA.maxInfants
 
 const MIN: Guests = { adults: 1, children: 0, infants: 0 }
 

@@ -1,4 +1,7 @@
 import type { ReactNode, Ref } from 'react'
+import calendarDots from '../assets/calendar-dots.svg'
+import caretDown from '../assets/caret-down.svg'
+import user from '../assets/user.svg'
 
 type Props = {
   ref?: Ref<HTMLButtonElement>
@@ -35,23 +38,11 @@ export function BarTrigger({ ref, icon, label, srPrefix, open, onToggle, control
         <span className="sr-only">{srPrefix} </span>
         {label}
       </span>
-      <svg className="chevron" width="10" height="10" viewBox="0 0 10 10" aria-hidden="true">
-        <path d="M2.5 3.75 5 6.25l2.5-2.5" />
-      </svg>
+      <img className="chevron" src={caretDown} width="14" height="14" alt="" />
     </button>
   )
 }
 
-export const PersonIcon = () => (
-  <svg className="bar-icon" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
-    <circle cx="6" cy="3.75" r="2.25" />
-    <path d="M1.75 10.75c.5-2.1 2.2-3.25 4.25-3.25s3.75 1.15 4.25 3.25" />
-  </svg>
-)
+export const PersonIcon = () => <img className="bar-icon" src={user} width="16" height="16" alt="" />
 
-export const CalendarIcon = () => (
-  <svg className="bar-icon" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
-    <rect x="1.5" y="2.25" width="9" height="8.25" rx="1.25" />
-    <path d="M1.5 4.75h9M4 1v2.25M8 1v2.25" />
-  </svg>
-)
+export const CalendarIcon = () => <img className="bar-icon" src={calendarDots} width="16" height="16" alt="" />

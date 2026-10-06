@@ -1,9 +1,17 @@
-# 01 · Sōl: guest selector and date picker
+# 01 · Sōl: Casa Oliva, with a working guest selector and date picker
 
 **Live:** [sol-booking-controls.vercel.app](https://sol-booking-controls.vercel.app)
 
-The Casa Oliva booking panel had a static "Oct 16 - Oct 20 | 2 guests" bar. This
-exploration turns both halves into working controls without redesigning the panel.
+The full Casa Oliva page, built from the Figma design, with the static
+"Oct 16 - Oct 20 | 2 guests" bar turned into working controls. The rest of the page
+is as designed. On top of that:
+
+- **Nav "Reserve"** scrolls to the booking panel, then opens the date picker.
+- **"Reserve"** in the panel gives a quiet confirmation of the dates, guests and total. Change either and it goes back to "Reserve".
+- **Amenities** scroll sideways with no arrows: the cut-off fifth card and a fade on the edge with more content are the hint. "Show all 8" lays them out as a grid.
+- **The details table** ("Guests 4", bedrooms, baths) and the guest selector's limit read from the same file, [villa.ts](src/villa.ts), so they can't disagree.
+
+The booking controls:
 
 - **Desktop:** each control opens an anchored popover that grows out of the button you pressed.
 - **Mobile:** the same controls open a bottom sheet with swipe-to-dismiss.
@@ -16,6 +24,9 @@ The full interaction spec — states, timings, easing, interruption — is in [S
 
 Add `?debug` to the URL for the motion lab controls (Subtle vs Expressive treatment,
 5× slow-mo, forced reduced motion), a live state readout and a stress-test checklist.
+
+Design source: Figma (Playground › DAY 4 - SOL). Original exports are in
+[design/casa-oliva/](design/casa-oliva); the app ships compressed copies from `src/assets/`.
 
 ## Stack
 React, TypeScript, Vite, [Base UI](https://base-ui.com) (Popover, Drawer) for

@@ -2,12 +2,11 @@ import type { PanelKey } from '../BookingSection'
 import type { DateState } from '../dates/dateState'
 import type { Guests } from '../guests/guestState'
 import type { Presentation } from '../panel/ResponsivePanel'
+import { DEBUG } from './debug'
 import { useLab, type ReducePref, type Treatment } from './LabContext'
 
 type Props = { guests: Guests; dates: DateState; openPanel: PanelKey | null; presentation: Presentation }
 
-/** Motion controls, state readout and stress checklist are for working sessions only — add ?debug to the URL. */
-const DEBUG = new URLSearchParams(window.location.search).has('debug')
 
 const STRESS = [
   '1 adult → mash minus',

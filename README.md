@@ -6,4 +6,4 @@ responsive behaviour, reduced motion, and the edge cases that break it.
 
 | # | Exploration | Live |
 |---|---|---|
-| 01 | [Sōl: guest selector and date picker](01-sol-booking-controls) | [sol-booking-controls.vercel.app](https://sol-booking-controls.vercel.app) |
+| 01 | [Sōl: Casa Oliva, with a working guest selector and date picker](01-sol-booking-controls) | [sol-booking-controls.vercel.app](https://sol-booking-controls.vercel.app) |
