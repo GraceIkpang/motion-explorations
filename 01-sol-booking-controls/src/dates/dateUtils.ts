@@ -65,3 +65,8 @@ export const fmtMonth = (m: MonthKey) =>
 
 export const fmtLong = (s: ISODate) =>
   fromISO(s).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })
+
+/** "Oct 16 – 20", or "Oct 30 – Nov 2" across months. */
+export function fmtRange(a: ISODate, b: ISODate) {
+  return monthOf(a) === monthOf(b) ? `${fmtShort(a)} – ${Number(b.slice(8))}` : `${fmtShort(a)} – ${fmtShort(b)}`
+}

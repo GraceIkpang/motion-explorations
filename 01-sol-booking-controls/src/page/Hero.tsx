@@ -1,15 +1,17 @@
+import type { Ref } from 'react'
 import hero from '../assets/hero.jpg'
 import logomark from '../assets/sol-logomark.svg'
 import { VILLA } from '../villa'
 
 type Props = {
+  ref?: Ref<HTMLElement>
   /** Scrolls to the booking panel and opens the date picker. */
   onReserve: () => void
 }
 
-export function Hero({ onReserve }: Props) {
+export function Hero({ ref, onReserve }: Props) {
   return (
-    <header className="hero">
+    <header ref={ref} className="hero">
       <img
         className="hero-img"
         src={hero}

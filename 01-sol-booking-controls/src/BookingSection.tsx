@@ -1,4 +1,4 @@
-import { useRef, useState, type Dispatch, type Ref } from 'react'
+import { useRef, type Dispatch, type Ref } from 'react'
 import { DATE_PICKER_ID, DateSelector } from './dates/DateSelector'
 import { nights, summarizeDates, type DateAction, type DateState } from './dates/dateState'
 import { GUEST_SELECTOR_ID, GuestSelector } from './guests/GuestSelector'
@@ -6,7 +6,7 @@ import { summarize, type GuestAction, type Guests } from './guests/guestState'
 import { BarTrigger, CalendarIcon, PersonIcon } from './panel/BarTrigger'
 import type { Presentation } from './panel/ResponsivePanel'
 import { fmtShort } from './dates/dateUtils'
-import { VILLA } from './villa'
+import { VILLA, quote, usd } from './villa'
 
 export type PanelKey = 'dates' | 'guests'
 
@@ -19,12 +19,13 @@ type Props = {
   openPanel: PanelKey | null
   setPanelOpen: (key: PanelKey, open: boolean) => void
   presentation: Presentation
+  /** Whether "Reserve" was pressed for the current selection. Lifted so the mobile bar can show it too. */
+  requested: boolean
+  onRequest: () => void
 }
 
-const { nightly: NIGHTLY, cleaning: CLEANING, servicePerNight: SERVICE_PER_NIGHT } = VILLA
 
 const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen']
-const usd = (n: number) => `$${n.toLocaleString('en-US')}`
 
 /** The existing Casa Oliva booking band. Only the Dates and Guests controls are new. */
 export function BookingSection({
@@ -36,6 +37,8 @@ export function BookingSection({
   openPanel,
   setPanelOpen,
   presentation,
+  requested,
+  onRequest,
 }: Props) {
   const barRef = useRef<HTMLDivElement>(null)
   const dateTriggerRef = useRef<HTMLButtonElement>(null)
@@ -43,19 +46,11 @@ export function BookingSection({
 
   // Prices read the committed range only — a half-picked range never reaches them.
   const n = nights(dates)
-  const subtotal = NIGHTLY * n
-  const service = SERVICE_PER_NIGHT * n
-  const total = subtotal + CLEANING + service
-
-  // Reserve → a quiet confirmation, tied to the exact selection it was made
-  // for. Change the dates or guests and it quietly goes back to "Reserve".
-  const selectionKey = `${dates.start}|${dates.end}|${summarize(guests)}`
-  const [requestedKey, setRequestedKey] = useState<string | null>(null)
-  const requested = requestedKey === selectionKey
+  const { subtotal, cleaning, service, total } = quote(n)
 
   const lines = [
-    [`${usd(NIGHTLY)} x ${n} nights`, usd(subtotal)],
-    ['Cleaning', usd(CLEANING)],
+    [`${usd(VILLA.nightly)} x ${n} nights`, usd(subtotal)],
+    ['Cleaning', usd(cleaning)],
     ['Service fee', usd(service)],
   ]
 
@@ -131,7 +126,7 @@ export function BookingSection({
             className="reserve"
             data-requested={requested || undefined}
             aria-disabled={requested || undefined}
-            onClick={() => setRequestedKey(selectionKey)}
+            onClick={onRequest}
           >
             <span className="reserve-label" data-label="idle" aria-hidden={requested}>
               Reserve

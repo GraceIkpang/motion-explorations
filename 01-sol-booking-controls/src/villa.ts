@@ -31,3 +31,12 @@ export const AMENITIES = [
   { kicker: 'Morning', name: 'Outdoor shower' },
   { kicker: 'Care', name: 'Daily housekeeping' },
 ] as const
+
+/** The price breakdown for a stay. The booking panel and the mobile booking bar both use it. */
+export function quote(nights: number) {
+  const subtotal = VILLA.nightly * nights
+  const service = VILLA.servicePerNight * nights
+  return { subtotal, cleaning: VILLA.cleaning, service, total: subtotal + VILLA.cleaning + service }
+}
+
+export const usd = (n: number) => `$${n.toLocaleString('en-US')}`

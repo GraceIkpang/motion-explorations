@@ -1344,6 +1344,113 @@ img {
 }
 
 /* ─────────────────────────────────────────────────────────────
+   Mobile booking bar — echoes the nav pill, in the band's dark glass.
+   Motion job: state. It enters (220ms) and leaves (160ms, same path),
+   then stays still. Transitions, so fast scrolling just retargets.
+   ───────────────────────────────────────────────────────────── */
+.booking-bar {
+  position: fixed;
+  z-index: 40;
+  left: 12px;
+  right: 12px;
+  bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 10px 10px 20px;
+  border: 1px solid rgb(255 255 255 / 0.1);
+  border-radius: 24px;
+  background: rgb(36 36 36 / 0.82);
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+  backdrop-filter: blur(24px) saturate(140%);
+  box-shadow: 0 12px 32px -12px rgb(0 0 0 / 0.45);
+  color: var(--ink);
+  /* Hidden: parked below the edge. Leaving uses these (quicker) timings. */
+  opacity: 0;
+  transform: translateY(calc(100% + 24px));
+  transition:
+    transform calc(160ms * var(--t)) var(--ease-out),
+    opacity calc(160ms * var(--t)) var(--ease-out);
+}
+
+.booking-bar[data-visible] {
+  opacity: 1;
+  transform: translateY(0);
+  transition-duration: calc(220ms * var(--t));
+}
+
+.booking-bar-text {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.booking-bar-total {
+  font: 600 18px/1.2 var(--serif);
+  color: var(--white);
+}
+
+.booking-bar-total-label {
+  font: 400 12px/1 var(--sans);
+  color: var(--gray-3);
+}
+
+.booking-bar-meta {
+  overflow: hidden;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--gray-3);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.booking-bar-reserve {
+  flex: none;
+  height: 44px;
+  padding: 0 22px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--white);
+  color: var(--black);
+  font-size: 15px;
+  font-weight: 510;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: transform 140ms var(--ease-out);
+}
+
+.booking-bar-reserve:active {
+  transform: scale(0.97);
+}
+
+.booking-bar-reserve:focus-visible {
+  outline: 2px solid var(--white);
+  outline-offset: 2px;
+}
+
+.booking-bar-reserve[data-requested] {
+  background: transparent;
+  color: var(--gray-6);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.25);
+}
+
+/* Sheets sit above the bar. */
+.sheet-backdrop,
+.sheet-viewport {
+  z-index: 50;
+}
+
+[data-motion='reduce'] .booking-bar {
+  transform: none;
+  transition: opacity calc(150ms * var(--t)) ease;
+}
+
+[data-motion='reduce'] .booking-bar-reserve:active {
+  transform: none;
+}
+
+/* ─────────────────────────────────────────────────────────────
    Reduced motion: lose movement, keep clarity.
    Every container still fades so open/close is never a pop.
    ───────────────────────────────────────────────────────────── */

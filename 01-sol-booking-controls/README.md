@@ -9,6 +9,7 @@ is as designed. On top of that:
 - **Nav "Reserve"** scrolls to the booking panel, then opens the date picker.
 - **"Reserve"** in the panel gives a quiet confirmation of the dates, guests and total. Change either and it goes back to "Reserve".
 - **Amenities** scroll sideways with no arrows: the cut-off fifth card and a fade on the edge with more content are the hint. "Show all 8" lays them out as a grid.
+- **On phones, a booking bar** ("$3,140 total · Oct 16 – 20 · 2 guests · Reserve") slides up once the hero has scrolled away and leaves when the real booking panel comes into view or a sheet opens. Its Reserve scrolls to the panel. It only appears or disappears — it never moves with the scroll.
 - **The details table** ("Guests 4", bedrooms, baths) and the guest selector's limit read from the same file, [villa.ts](src/villa.ts), so they can't disagree.
 
 The booking controls:
